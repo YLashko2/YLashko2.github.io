@@ -9,7 +9,7 @@
         </div>
         <div class="col-lg-6 right">
             <div class="right-div">
-                <h2 class="event-name">{{ event_.name }}</h2>
+                <h2 class="event-name">{{ event_.name }} - {{ event_.price }} zł</h2>
                 <p class="description">
                     {{ event_.description }}
                 </p>

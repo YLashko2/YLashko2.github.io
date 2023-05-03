@@ -103,7 +103,7 @@ export default {
       width: 100%;
       height: 4vh;
       outline: none;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(77, 34, 155, 0.8);
       cursor: pointer;
       transition: 0.3s;
     }

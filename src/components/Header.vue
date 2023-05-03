@@ -38,13 +38,10 @@ export default {
 <template>
   <div class="container-fluid pt-5">
       <div class="row header">
-        <div class="col-lg-4 text-start">
-          <img class="logo" src="/src/assets/images/BiletX.svg" alt="logo">
+        <div class="col-lg-6 text-start">
+          <a href="/"><img class="logo" src="/src/assets/images/BiletX.svg" alt="logo"></a>
         </div>
-        <div class="col-lg-4 search-container text-start">
-          <a class="header-links searchbar" href="#">Search</a>
-        </div>
-        <div class="col-lg-4 header-items">
+        <div class="col-lg-6 header-items">
           <a class="header-links" id="account-link" v-bind:href="this.getHeaderLink()">{{ getHeaderStr() }}</a><img class="account-logo" src="/src/assets/vector.svg" alt="acc-logo">
         </div>
       </div>
@@ -65,7 +62,7 @@ export default {
     .header-links{
       text-decoration: none;
       color: white;
-      font-size: 4vh;
+      font-size: 3vh;
     }
     .logo {
       cursor: pointer;

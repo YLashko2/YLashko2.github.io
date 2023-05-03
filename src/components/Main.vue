@@ -6,7 +6,7 @@
      <div class="container-fluid media-scroller snaps-inline">
       <div v-for="event_ in events.popular" class="media-element">
         <a v-bind:href="'event/' + event_.id"><img class="scroller-element" v-bind:src="event_.preview_image"></a>
-        <p class="scroller-title">{{ event_.name }}</p>
+        <p class="scroller-title">{{ event_.name }} - {{ event_.price }} zł</p>
       </div>
     </div>
     <div class="container mb-3 title-container">
@@ -17,7 +17,7 @@
         <div class="col-sm mb-3" v-for="event_ in events.top">
           <div class="card">
             <a v-bind:href="'event/' + event_.id"><img class="card-img" v-bind:src="event_.preview_image" alt="event-preview"></a>
-            <p class="card-title">{{ event_.name }}</p>
+            <p class="card-title">{{ event_.name }} - {{ event_.price }} zł</p>
           </div>
         </div>
       </div>
@@ -199,10 +199,10 @@ export default {
     .card{
       background: none;
       border-radius: 2vh;
-      height: 40vh;
+      padding: 2vh 2vh 0.5vh 2vh;
+      height: auto;
       box-shadow: var(--shadow-2);
       transition: all 0.2s ease-in-out;
-
     }
     .card-img{
       object-fit: cover;

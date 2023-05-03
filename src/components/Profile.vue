@@ -142,80 +142,80 @@ export default {
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
 
     * {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 100;  
+      font-family: 'Outfit', sans-serif;
+      font-weight: 100;  
     }
     body{
-    background: linear-gradient(90deg, rgba(5,5,80,1) 6%, rgba(149,110,156,1) 100%);
+      background: linear-gradient(90deg, rgba(5,5,80,1) 6%, rgba(149,110,156,1) 100%);
     } 
 
     .header-links{
-    text-decoration: none;
-    color: white;
-    font-size: 4vh;
+      text-decoration: none;
+      color: white;
+      font-size: 4vh;
     }
     .logo {
-    cursor: pointer;
-    width: 90%;
-    margin-left: 2vw;
+      cursor: pointer;
+      width: 90%;
+      margin-left: 2vw;
     }
     .account-logo{
-    width: auto;
-    height: auto;
+      width: auto;
+      height: auto;
     }
     .header-items{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     p{
-    color: white;
+      color: white;
     }
     .preview {
-    height: 28vh;
-    width: auto;
-    aspect-ratio: 16/9;
-    object-fit: cover;
-    border-radius: 3vh;
-    border: 0.1vh solid #eeaef8;
+      width: auto;
+      max-width: 50vh;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 3vh;
+      border: 0.1vh solid #eeaef8;
     }
 
     .event-name, .event-price, .event-date {
-    font-size: 3vh;
+      font-size: 3vh;
     }
 
     .event-info{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .bx {
-    margin-bottom: 2vh;
+      margin-bottom: 2vh;
     }
     .bx-active{
-    color: #eeaef8;
+      color: #eeaef8;
     }
     .bx-unactive{
-    color: red;
+      color: red;
     }
 
     .title-container{
-    text-align: center;
-    width: 100%;
-    margin: 2vh 0 2vh 0;
+      text-align: center;
+      width: 100%;
+      margin: 2vh 0 2vh 0;
     }
     .page-title{
-    color: white;
-    font-size: 4vh;
-    text-shadow: 0px 3px 11px black;
-    margin: 2vh 0 2vh 0;
+      color: white;
+      font-size: 4vh;
+      text-shadow: 0px 3px 11px black;
+      margin: 2vh 0 2vh 0;
     }
     .active {
-    background: rgba(18, 18, 201, 0.3);
-    border-radius: 3vh;
+      background: rgba(18, 18, 201, 0.3);
+      border-radius: 3vh;
     }
     .unactive {
-    background: rgba(99, 99, 99, 0.5);
-    border-radius: 3vh;
+      background: rgba(99, 99, 99, 0.5);
+      border-radius: 3vh;
     }
 </style>

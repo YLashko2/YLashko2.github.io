@@ -24,7 +24,16 @@ export default {
       } catch (err) {
         window.alert(err);
       }
-    }
+    },
+    
+    async loginGoogle() {
+      try {
+        await this.store.dispatch('loginGoogle', {});
+        this.router.push("/");
+      } catch (err) {
+        window.alert(err);
+      }
+    },
   }
 }
 </script>
@@ -102,7 +111,7 @@ export default {
       width: 100%;
       height: 4vh;
       outline: none;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(77, 34, 155, 0.8);
       cursor: pointer;
       transition: 0.3s;
     }
@@ -153,6 +162,10 @@ export default {
         <div class="right">
           <a class="que" href="/register">Don't have an account?</a>
         </div>
+      </div>
+
+      <div class="input-button">
+        <button v-on:click="this.loginGoogle();">Login with Google</button>
       </div>
     </div>
   </div>

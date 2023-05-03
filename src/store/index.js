@@ -1,6 +1,9 @@
 import { createStore } from 'vuex';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebaseInit.js";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+const provider = new GoogleAuthProvider();
 
 const store = createStore({
     state: {
@@ -28,6 +31,15 @@ const store = createStore({
     actions: {
         async register(context, { email, password }){
             const response = await createUserWithEmailAndPassword(auth, email, password);
+            if (response) {
+                context.commit('SET_USER', response.user);
+            } else {
+                throw new Error('Unable to register user');
+            }
+        },
+
+        async loginGoogle(context, {}) {
+            const response = await signInWithPopup(auth, provider);
             if (response) {
                 context.commit('SET_USER', response.user);
             } else {
