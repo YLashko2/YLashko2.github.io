@@ -1,47 +1,78 @@
 <template>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet"/>
     <Header/>
     <div class="row main">
         <div class="col-lg-6 left">
             <div class="left-div">
-                <img class="event-img" src="https://images.unsplash.com/photo-1666563824801-b4e532192a4f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80">
+                <img class="event-img" v-bind:src="event_.preview_image">
             </div>
         </div>
         <div class="col-lg-6 right">
             <div class="right-div">
-                <h2 class="event-name">Title</h2>
+                <h2 class="event-name">{{ event_.name }}</h2>
                 <p class="description">
-                    This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text. This is a sample text.
+                    {{ event_.description }}
                 </p>
-            </div>
-            <div class="map" id="mapContainer">
-
+                <h3 class="event-data">When? {{ new Date(this.event_.date.seconds * 1000).toLocaleString() }}</h3>
+                <h3 class="event-data">Where? {{ event_.address }}</h3>
             </div>
         </div>
+        <div class="map" id="mapContainer">
+
+        </div>
+    </div>
+    <button class="add-reservaion-button" v-on:click="submitReservation" v-if="this.store.getters.user.loggedIn">Submit a reservaion</button>
+    <div class="container-fluid mt-5 footer">
+      <div class="row">
+        <div class="by mt-3">
+          <p class="authors">
+            Ryhor Hapkala 218524
+            <br>
+            Yahor&nbsp;Lashko&nbsp;&nbsp;219145
+          </p>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import db from "../firebaseInit";
 import Header from "./Header.vue";
     export default {
-        data: () => ({
-
-        }),
-        mounted() {
-            [
-                "https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js",
-                "https://unpkg.com/leaflet@1.6.0/dist/leaflet.js",
-                "map.js"
-            ].forEach(imp => {
-                let scr = document.createElement('script');
-                scr.setAttribute("src", imp);
-                scr.setAttribute("type", "module");
-                document.head.appendChild(scr);
-            })
+        data() {
+            return {
+                store: useStore(),
+                router: useRouter(),
+                event_: {
+                    date: "",
+                },
+            }
+        },
+        async mounted() {
+            await this.getEvent();
+            var map = L.map('mapContainer').setView([this.event_.place._lat, this.event_.place._long], 13);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
         },
         methods: {
+            async getEvent() {
+                let events = await getDocs(query(collection(db, "events"), where("id", "==", parseInt(this.$route.params.event_id, 10))));
+                this.event_ = events.docs[0].data();
+            },
 
+            async submitReservation() {
+                const reservationRef = doc(collection(db, "tickets"), "tickets-" + this.store.getters.user.data.email + "-" + this.event_.id);
+                await setDoc(reservationRef, {
+                    user_email: this.store.getters.user.data.email,
+                    event_id: this.event_.id,
+                });
+                this.router.push("/");
+            },
         },
         components: {
             Header,
@@ -61,8 +92,7 @@ import Header from "./Header.vue";
     }
     .main {
         margin-top: 2vh;
-        padding-left: 100px;
-        padding-right: 100px;
+        padding: 0 5vw 0 5vw;
     }
     .right {
         padding: 2vh;
@@ -70,22 +100,19 @@ import Header from "./Header.vue";
     .left {
         padding: 2vh;
     }
-    .main {
-        height: fit-content;
-    }
     .right-div {
-        width: 100%;
-        height: 40%;
+        height: 100%;
         background-color: #28285f;
         border-radius: 4vh;
         padding: 1vh;
         overflow: hidden;
     }
     .map {
-        height: 60%;
+        max-height: 55%;
+        min-height: 250px;
         width: 100%;
         border-radius: 4vh;
-        margin-top: 2vw;
+        margin-top: 2vh;
         background-color: #28285f;
     }
     .left-div {
@@ -99,17 +126,38 @@ import Header from "./Header.vue";
     .event-name {
         padding-left: 0vw;
     }
+    .event-data {
+        font-size: 22px;
+    }
     p {
         padding-left: 1vw;
         padding-right: 1vw;
         font-size: 18px;
     }
     .event-img {
-        transition: all 0.6s ease-in-out;
-        transform: rotate(0deg);
         object-fit: cover;
         border-radius: 4vh;
         height: auto;
         width: 100%;
+        aspect-ratio: 4/3;
+    }
+    .add-reservaion-button {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 7px;
+        margin-top: 10px
+    }
+    .authors{
+      letter-spacing: 4px;
+    }
+
+    .authors:hover {
+      transform: rotateY(1000000deg);
+      transition: transform 1000s;
+    }
+    .footer{
+      background: gray;
+      height: 10vh;
+      background: black;
     }
 </style>

@@ -1,34 +1,28 @@
 <script>
-import Login from './components/Login.vue'
-import Event_ from './components/Event_.vue'
-
-const routes = {
-  '/login': Login,
-  '/event': Event_,
-}
+import { useStore } from 'vuex';
+import { auth } from './firebaseInit';
+import router from './routes/index.js';
 
 export default {
+  setup() {
+    const store = useStore();
+
+    auth.onAuthStateChanged(user => {
+        store.dispatch("fetchUser", user);
+    });
+  },
+
   data() {
     return {
-      currentPath: window.location.hash
+      router: router,
+      store: useStore(),
     }
-  },
-  computed: {
-    currentView() {
-      return routes[this.currentPath.slice(1) || '/']
-    }
-  },
-  mounted() {
-    window.addEventListener('hashchange', () => {
-		  this.currentPath = window.location.hash
-		})
   }
 }
-
 </script>
 
 <template>
-  <component :is="currentView" />
+  <router-view />
 </template>
 
 <style scoped>

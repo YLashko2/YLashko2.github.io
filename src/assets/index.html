@@ -1,58 +1,17 @@
-<script>
-import { onAuthStateChanged } from "firebase/auth";
-import { VueElement } from "vue";
-import { auth } from '../firebaseInit';
-import { useStore } from 'vuex';
-import db from "../firebaseInit";
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
-
-export default {
-  data() {
-    return {
-      store: useStore(),
-      userEmail: "",
-    }
-  },
-
-  methods: {
-    getHeaderStr() {
-      if (this.store.getters.user.loggedIn) {
-        this.userEmail = this.store.getters.user.data.email;
-        return this.store.getters.user.data.email;
-      } else {
-        return "Login";
-      }
-    },
-
-    getHeaderLink() {
-      if (this.store.getters.user.loggedIn) {
-        return "/profile";
-      } else {
-        return "/login";
-      }
-    },
-  }
-}
-</script>
-
-<template>
-  <div class="container-fluid pt-5">
-      <div class="row header">
-        <div class="col-lg-4 text-start">
-          <img class="logo" src="/src/assets/images/BiletX.svg" alt="logo">
-        </div>
-        <div class="col-lg-4 search-container text-start">
-          <a class="header-links searchbar" href="#">Search</a>
-        </div>
-        <div class="col-lg-4 header-items">
-          <a class="header-links" id="account-link" v-bind:href="this.getHeaderLink()">{{ getHeaderStr() }}</a><img class="account-logo" src="/src/assets/vector.svg" alt="acc-logo">
-        </div>
-      </div>
-    </div>
-</template>
-
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/open-props">
+  <link rel="stylesheet" href="https://unpkg.com/open-props/normalize.min.css"> 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
     * {
       letter-spacing: 2px;
       font-weight: 100;
@@ -70,13 +29,7 @@ export default {
     .logo {
       cursor: pointer;
       width: 90%;
-      max-width: 30vh;
       margin-left: 2vw;
-    }
-    .search-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     .account-logo{
       width: auto;
@@ -84,9 +37,8 @@ export default {
     }
     .header-items{
       display: flex;
-      justify-content: end;
-      align-items: end;
-      padding-right: 20px;
+      justify-content: center;
+      align-items: center;
     }
     p{
       color: white;
@@ -205,4 +157,57 @@ export default {
     .authors{
       letter-spacing: 4px;
     }
-</style>
+
+    </style>
+    <title>Main_page</title>
+  </head>
+  <body>
+     <div class="container-fluid pt-5">
+      <div class="row header">
+        <div class="col-sm">
+          <img class="logo" src="images/BiletX.svg" alt="logo">
+        </div>
+        <div class="col-sm header-items">
+          <a class="header-links searchbar" href="#">Search</a>
+        </div>
+        <div class="col-sm header-items">
+          <a class="header-links" href="#">Account</a>
+          <img class="account-logo" src="images/vector.svg" alt="acc-logo">
+        </div>
+      </div>
+     </div>
+      <div class="container mt-5 title-container">
+        <p class="title">POPULAR EVENTS</p>
+      </div>
+     <div class="container-fluid media-scroller snaps-inline">
+      <div class="media-element">
+        <img class="scroller-element" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80">
+        <p class="scroller-title">Example of event{PRICE}</p>
+      </div>
+    </div>
+    <div class="container mb-3 title-container">
+      <p class="title">TOP EVENTS</p>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm mb-3">
+          <div class="card">
+            <a href="#"><img class="card-img" src="https://images.unsplash.com/photo-1582192903020-8a5e59dcdcf2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="event-preview"></a>
+            <p class="card-title">Example of event</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid mt-5 footer">
+      <div class="row">
+        <div class="by mt-3">
+          <p class="authors">
+            Ryhor Hapkala 218524
+            <br>
+            Yahor&nbsp;Lashko&nbsp;&nbsp;219145
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,58 +1,90 @@
-<script>
-import { onAuthStateChanged } from "firebase/auth";
-import { VueElement } from "vue";
-import { auth } from '../firebaseInit';
-import { useStore } from 'vuex';
-import db from "../firebaseInit";
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
-
-export default {
-  data() {
-    return {
-      store: useStore(),
-      userEmail: "",
-    }
-  },
-
-  methods: {
-    getHeaderStr() {
-      if (this.store.getters.user.loggedIn) {
-        this.userEmail = this.store.getters.user.data.email;
-        return this.store.getters.user.data.email;
-      } else {
-        return "Login";
-      }
-    },
-
-    getHeaderLink() {
-      if (this.store.getters.user.loggedIn) {
-        return "/profile";
-      } else {
-        return "/login";
-      }
-    },
-  }
-}
-</script>
-
 <template>
-  <div class="container-fluid pt-5">
-      <div class="row header">
-        <div class="col-lg-4 text-start">
-          <img class="logo" src="/src/assets/images/BiletX.svg" alt="logo">
+    <Header />
+      <div class="container mt-5 title-container">
+        <p class="title">POPULAR EVENTS</p>
+      </div>
+     <div class="container-fluid media-scroller snaps-inline">
+      <div v-for="event_ in events.popular" class="media-element">
+        <a v-bind:href="'event/' + event_.id"><img class="scroller-element" v-bind:src="event_.preview_image"></a>
+        <p class="scroller-title">{{ event_.name }}</p>
+      </div>
+    </div>
+    <div class="container mb-3 title-container">
+      <p class="title">TOP EVENTS</p>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm mb-3" v-for="event_ in events.top">
+          <div class="card">
+            <a v-bind:href="'event/' + event_.id"><img class="card-img" v-bind:src="event_.preview_image" alt="event-preview"></a>
+            <p class="card-title">{{ event_.name }}</p>
+          </div>
         </div>
-        <div class="col-lg-4 search-container text-start">
-          <a class="header-links searchbar" href="#">Search</a>
-        </div>
-        <div class="col-lg-4 header-items">
-          <a class="header-links" id="account-link" v-bind:href="this.getHeaderLink()">{{ getHeaderStr() }}</a><img class="account-logo" src="/src/assets/vector.svg" alt="acc-logo">
+      </div>
+    </div>
+    <div class="container-fluid mt-5 footer">
+      <div class="row">
+        <div class="by mt-3">
+          <p class="authors">
+            Ryhor Hapkala 218524
+            <br>
+            Yahor&nbsp;Lashko&nbsp;&nbsp;219145
+          </p>
         </div>
       </div>
     </div>
 </template>
 
+<script>
+import { collection, getDocs, query } from 'firebase/firestore';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import db from "../firebaseInit";
+import Header from './Header.vue';
+export default {
+  components: { Header },
+
+  data() {
+    return {
+      store: useStore(),
+      router: useRouter(),
+      events: {
+        popular: [],
+        top: []
+      },
+    }
+  },
+
+  methods: {
+    async getEvents() {
+      this.events = {
+        popular: [],
+        top: []
+      }
+      let events = await getDocs(query(collection(db, "events")));
+
+      events.forEach(doc => {
+        let data = doc.data();
+        switch (data.category) {
+          case "Popular": this.events.popular.push(data);
+          break;
+          case "Top": this.events.top.push(data);
+          break;
+        }
+      });
+      console.log(this.events);
+    }
+  },
+
+  async mounted() {
+    await this.getEvents();
+  }
+}
+</script>
+
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
+    
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
     * {
       letter-spacing: 2px;
       font-weight: 100;
@@ -70,13 +102,7 @@ export default {
     .logo {
       cursor: pointer;
       width: 90%;
-      max-width: 30vh;
       margin-left: 2vw;
-    }
-    .search-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     .account-logo{
       width: auto;
@@ -84,9 +110,8 @@ export default {
     }
     .header-items{
       display: flex;
-      justify-content: end;
-      align-items: end;
-      padding-right: 20px;
+      justify-content: center;
+      align-items: center;
     }
     p{
       color: white;
@@ -115,6 +140,7 @@ export default {
 
     .media-element {                    /*grid item*/
       display: grid;
+      max-width: 20vw;
       border-radius: 2vh;
       gap: var(--size-1) ;                /*padding between img and title*/
       padding: var(--size-1);
@@ -204,5 +230,10 @@ export default {
     }
     .authors{
       letter-spacing: 4px;
+    }
+
+    .authors:hover {
+      transform: rotateY(1000000deg);
+      transition: transform 1000s;
     }
 </style>

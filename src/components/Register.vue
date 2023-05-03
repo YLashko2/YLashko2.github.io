@@ -1,31 +1,32 @@
 <script>
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseInit.js";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import db from "../firebaseInit.js";
 export default {
-  data () {
-      return {
-          email: "",
-          pass: "",
-          store: useStore(),
-          router: useRouter(),
-      }
-  },
-  methods: {
-    async login() {
-      try {
-        await this.store.dispatch('login', {
-          email: this.email,
-          password: this.pass
-        });
-        this.router.push("/");
-      } catch (err) {
-        window.alert(err);
-      }
-    }
-  }
+    data() {
+        return {
+            email: "",
+            pass: "",
+            store: useStore(),
+            router: useRouter()
+        }
+    },
+    methods: {
+        async register() {
+          try {
+            await this.store.dispatch('register', {
+              email: this.email,
+              password: this.pass
+            });
+            this.router.push("/");
+          } catch (err) {
+            window.alert(err);
+          }
+        },
+    },
 }
 </script>
 
@@ -131,8 +132,8 @@ export default {
 <div class="box">
     <div class="container">
       <div class="top-header">
-        <span>Have an account?</span>
-        <header>Login</header>
+        <span>Don't have an account?</span>
+        <header>Register</header>
       </div>
 
       <div class="input-field">
@@ -146,12 +147,12 @@ export default {
       </div>
 
       <div class="input-button">
-        <input type="submit" class="submit" v-on:click="this.login();" value="Login">
+        <input type="submit" class="submit" v-on:click="this.register();" value="Register">
       </div>
 
       <div class="bottom">
         <div class="right">
-          <a class="que" href="/register">Don't have an account?</a>
+          <a class="que" href="/login">Already got an account?</a>
         </div>
       </div>
     </div>
