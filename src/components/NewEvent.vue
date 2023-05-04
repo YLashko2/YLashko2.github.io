@@ -59,6 +59,7 @@ export default {
                     description: this.description,
                 }
             );
+            this.router.push("/");
         }
     }
 }
@@ -68,26 +69,63 @@ export default {
     <div class="main">
         <button v-on:click="getCoordinates">Get coordinates from your current position</button>
         <form action="/" @submit.prevent="createEvent">
-            <input required v-model="name" placeholder="Name">
-            <select required v-model="category">
+            <input class="col-sm input-area" required v-model="name" placeholder="Event name">
+            <select class="col-sm select-area" required v-model="category">
                 <option selected>Top</option>
                 <option>Popular</option>
             </select>
-            <input required v-model="date" placeholder="date">
-            <input required v-model="imageLink" placeholder="image_link">
-            <input required v-model="lat" placeholder="Coordinates (lat)">
-            <input required v-model="lng" placeholder="Coordinates (lng)">
-            <input required v-model="address" placeholder="Address">
-            <input required v-model="maxUsers" placeholder="Max users">
-            <input required v-model="price" placeholder="Price">
-            <textarea required v-model="description"></textarea>
+            <input type="datetime-local" class="col-sm input-area" required v-model="date" placeholder="Date">
+            <input type="text" class="col-sm input-area" required v-model="imageLink" placeholder="Image url">
+            <input type="number" class="col-sm input-area" required v-model="lat" placeholder="Coordinates (lat)">
+            <input type="number" class="col-sm input-area" required v-model="lng" placeholder="Coordinates (lng)">
+            <input type="text" class="col-sm input-area" required v-model="address" placeholder="Address">
+            <input type="numner" class="col-sm input-area" required v-model="maxUsers" placeholder="Max users">
+            <input type="number" class="col-sm input-area" required v-model="price" placeholder="Price">
+            <textarea placeholder="Description" class="col-sm input-area" required v-model="description"></textarea>
             <button v-on:click="createEvent">Create event</button>
         </form>
     </div>
 </template>
 
 <style scoped>
+    form, main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
     form > *, .main > * {
-        display: block;
+        margin: 1vh 0 1vh 0;
+    }
+    .input-area {
+      width: 100%;
+      height: auto;
+      padding: 8px;
+      border-radius: 1.5vh;
+      text-align: center;
+      font-size: 2vh;
+      max-width: 50vh;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+    }
+
+    button {
+        width: 100%;
+        max-width: 50vh;
+    }
+
+    .select-area{
+      display: block;
+      height: auto;
+      padding: 8px;
+      font-size: 2vh;
+      text-align: center;
+      border-radius: 1.5vh;
+      width: 100%;
+      max-width: 50vh;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
     }
 </style>
