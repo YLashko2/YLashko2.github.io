@@ -58,6 +58,7 @@ import Header from "./Header.vue";
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
+            L.marker([this.event_.place._lat, this.event_.place._long]).addTo(map);
         },
         methods: {
             async getEvent() {

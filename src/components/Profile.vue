@@ -87,7 +87,10 @@ export default {
 
 <template>
     <h2>Hello, {{ getUser().email }}</h2>
-    <button v-on:click="signout">Sign out</button>
+    <div class="d-flex buttons-container">
+      <button v-on:click="signout">Sign out</button>
+      <button v-on:click="router.push('/newevent')">New event</button>
+    </div>
 
    <div class="title-container">
     <p class="page-title">Active tickets</p>
@@ -178,6 +181,15 @@ export default {
       object-fit: cover;
       border-radius: 3vh;
       border: 0.1vh solid #eeaef8;
+    }
+
+    .buttons-container {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .buttons-container > * {
+      margin: 3px;
     }
 
     .event-name, .event-price, .event-date {
