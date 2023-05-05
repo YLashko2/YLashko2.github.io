@@ -86,7 +86,7 @@ export default {
 </script>
 
 <template>
-    <h2>Hello, {{ getUser().email }}</h2>
+    <h2 class="page-title">Hello, {{ getUser().email }}</h2>
     <div class="d-flex buttons-container">
       <button v-on:click="signout">Sign out</button>
       <button v-on:click="router.push('/newevent')">New event</button>
@@ -134,7 +134,7 @@ export default {
         </div>
         <div class="col event-info">
           <p class="event-date">{{ new Date(event_.date.seconds * 1000).toLocaleString() }}</p>
-          <i class="bx bx-active bx-time bx-md"></i>
+          <i class="bx bx-unactive bx-time bx-md"></i>
         </div>
       </div>
     </div>
@@ -143,6 +143,7 @@ export default {
 
 <style scoped>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
+    @import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
 
     * {
       font-family: 'Outfit', sans-serif;
@@ -176,7 +177,8 @@ export default {
     }
     .preview {
       width: auto;
-      max-width: 50vh;
+      max-width: 100%;
+      min-width: 20vw;
       aspect-ratio: 16/9;
       object-fit: cover;
       border-radius: 3vh;
@@ -193,7 +195,7 @@ export default {
     }
 
     .event-name, .event-price, .event-date {
-      font-size: 3vh;
+      font-size: min(3vh, 6vw);
     }
 
     .event-info{
@@ -218,9 +220,10 @@ export default {
     }
     .page-title{
       color: white;
-      font-size: 4vh;
+      font-size: min(4vh, 7vw);
       text-shadow: 0px 3px 11px black;
-      margin: 2vh 0 2vh 0;
+      width: fit-content;
+      margin: 0 auto 0 auto;
     }
     .active {
       background: rgba(18, 18, 201, 0.3);

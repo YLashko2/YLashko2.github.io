@@ -128,4 +128,9 @@ export default {
       background: rgba(255, 255, 255, 0.1);
       color: white;
     }
+
+    .select-area > option {
+        color: black;
+        background-color: rgb(120, 120, 120);
+    }
 </style>

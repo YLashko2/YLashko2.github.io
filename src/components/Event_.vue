@@ -24,13 +24,12 @@
     <button class="add-reservaion-button" v-on:click="submitReservation" v-if="this.store.getters.user.loggedIn">Submit a reservaion</button>
     <div class="container-fluid mt-5 footer">
       <div class="row">
-        <div class="by mt-3">
           <p class="authors">
             Ryhor Hapkala 218524
-            <br>
+          </p>
+          <p class="authors">
             Yahor&nbsp;Lashko&nbsp;&nbsp;219145
           </p>
-        </div>
       </div>
     </div>
 </template>
@@ -112,6 +111,7 @@ import Header from "./Header.vue";
         max-height: 55%;
         min-height: 250px;
         width: 100%;
+        margin: 0 12px 0 12px;
         border-radius: 4vh;
         margin-top: 2vh;
         background-color: #28285f;
@@ -149,7 +149,10 @@ import Header from "./Header.vue";
         margin-top: 10px
     }
     .authors{
-      letter-spacing: 4px;
+        padding: 4px;
+        margin: 0;
+        letter-spacing: 4px;
+        width: 100%;
     }
 
     .authors:hover {

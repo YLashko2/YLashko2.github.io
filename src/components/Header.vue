@@ -62,7 +62,7 @@ export default {
     .header-links{
       text-decoration: none;
       color: white;
-      font-size: 3vh;
+      font-size: min(3vh, 6vw);
     }
     .logo {
       cursor: pointer;
@@ -89,7 +89,7 @@ export default {
       color: white;
     }
 
-    .scroller-element {               /*picture*/
+    .scroller-element {
       inline-size: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
@@ -97,26 +97,22 @@ export default {
       height: 20vh;
     }
 
-    .media-scroller {                   /*grid container*/
+    .media-scroller {
       padding-top: 3vh;
       margin-bottom: 6vh;
       display: grid;
-      gap: 0.5vw;               /*space between cards*/
+      gap: 0.5vw;
       grid-auto-flow: column;
-                /*% of cards showing without scrolling*/
-      padding: var(--size-3) var(--size-3); /*padding top left and bottom*/
-      /*background: #19195e; */
+      padding: var(--size-3) var(--size-3);
       overflow-x: auto;
       overscroll-behavior-inline: contain;
     }
 
-    .media-element {                    /*grid item*/
+    .media-element {
       display: grid;
       border-radius: 2vh;
-      gap: var(--size-1) ;                /*padding between img and title*/
+      gap: var(--size-1);
       padding: var(--size-1);
-      /*background: var(--surface-2);       /*seraja hujnia vokrug card*/
-      /*border-radius: var(--radius-2);     /*zakruglenie seroj hujni vokrug card*/
       box-shadow: var(--shadow-2);
       transition: all 0.2s ease-in-out;
     }
@@ -124,14 +120,14 @@ export default {
       font-size: 1.5vh;
     }
 
-    /*.media-element:hover {
-      transform: scale(1.1);
-    } */
+    .scroller-element:hover {
+      transform: scale(1.05);
+    }
 
     .snaps-inline {
       scroll-snap-type: inline mandatory;
-      scroll-padding-inline: var(--size-2);   /*padding from the left added*/
-      scroll-snap-align: start;               /* first card cant be shown partially *grif-auto-columns*/
+      scroll-padding-inline: var(--size-2);
+      scroll-snap-align: start;
     }
 
     .title-container{
@@ -145,17 +141,17 @@ export default {
       font-size: 2.5vh;
     } 
 
-    ::-webkit-scrollbar {                       /* место для езды ползунка */
+    ::-webkit-scrollbar {                       
       height: 4px;
       width: 6px;
       background: #073678;
     }
 
-    ::-webkit-scrollbar-thumb:vertical {        /* ползунок */
+    ::-webkit-scrollbar-thumb:vertical {      
       background: #7104de;
     }
 
-    ::-webkit-scrollbar:horizontal {                       /* место для езды ползунка */
+    ::-webkit-scrollbar:horizontal {                   
       height: 4px;
       width: 4px;
       background: #073678;
@@ -181,7 +177,7 @@ export default {
       height: 35vh;
     }
     .card:hover{
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
     .card-title{
       text-align: center;
