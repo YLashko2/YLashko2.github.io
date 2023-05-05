@@ -106,6 +106,7 @@ import Header from "./Header.vue";
         border-radius: 4vh;
         padding: 1vh;
         overflow: hidden;
+        text-align: center;
     }
     .map {
         max-height: 55%;
@@ -131,9 +132,10 @@ import Header from "./Header.vue";
         font-size: 22px;
     }
     p {
-        padding-left: 1vw;
-        padding-right: 1vw;
         font-size: 18px;
+    }
+    .description > * {
+        padding: 0 auto 0 auto;
     }
     .event-img {
         object-fit: cover;

@@ -85,7 +85,6 @@ export default {
     
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
     @import url("https://unpkg.com/open-props");
-    @import url("https://unpkg.com/open-props/normalize.min.css");
     * {
       letter-spacing: 2px;
       font-weight: 100;
