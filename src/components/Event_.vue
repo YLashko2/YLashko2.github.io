@@ -77,7 +77,7 @@ import Header from "./Header.vue";
 
             share() {
                 navigator.share({
-                    url: ("/" + this.event_.id),
+                    url: ("/event/" + this.event_.id),
                     title: "Event",
                     text: "I want to share this event with you"
                 });
