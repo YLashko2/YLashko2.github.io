@@ -99,7 +99,7 @@ export default {
     <div class="ticket active">
       <div class="row">
         <div class="col-sm event-info" >
-          <img class="preview" v-bind:src="event_.preview_image">
+          <a v-bind:href="'/event/' + event_.id"><img class="preview" v-bind:src="event_.preview_image"></a>
         </div>
         <div class="col event-info" >
           <p class="event-name">{{ event_.name }}</p>
@@ -117,14 +117,14 @@ export default {
       </div>
     </div>
     </div>
-   <div class="title-container">
+  <div class="title-container">
     <p class="page-title">History</p>
   </div>
     <div class="container-fluid mt-5" v-for="event_ in pastEvents">
     <div class="ticket unactive">
       <div class="row">
         <div class="col-sm event-info" >
-          <img class="preview" v-bind:src="event_.preview_image">
+          <a v-bind:href="'/event/' + event_.id"><img class="preview" v-bind:src="event_.preview_image"></a>
         </div>
         <div class="col event-info" >
           <p class="event-name">{{ event_.name }}</p>

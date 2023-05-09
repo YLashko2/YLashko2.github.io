@@ -22,6 +22,7 @@
         </div>
     </div>
     <button class="add-reservaion-button" v-on:click="submitReservation" v-if="this.store.getters.user.loggedIn">Submit a reservaion</button>
+    <button class="add-reservaion-button" v-on:click="share">Share</button>
     <div class="container-fluid mt-5 footer">
       <div class="row">
           <p class="authors">
@@ -73,6 +74,14 @@ import Header from "./Header.vue";
                 });
                 this.router.push("/");
             },
+
+            share() {
+                navigator.share({
+                    url: ("ylashko2.github.io/event/" + this.event_.id),
+                    title: "Event",
+                    text: "I want to share this event with you"
+                });
+            }
         },
         components: {
             Header,
@@ -148,7 +157,7 @@ import Header from "./Header.vue";
         width: 100%;
         max-width: 400px;
         border-radius: 7px;
-        margin-top: 10px
+        margin: 10px 4px 0 4px;
     }
     .authors{
         padding: 4px;
