@@ -3,6 +3,7 @@ import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, limit } from 
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import db from "../firebaseInit";
+import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from "firebase/storage";
 export default {
     data() {
         return {
@@ -18,27 +19,64 @@ export default {
             price: "",
             address: "",
             maxUsers: "",
+            map: null,
+            recording: false,
+            height: 1280,
+            width: 720,
+            storage: getStorage(),
+            uploadFromCamera: false,
+        }
+    },
+
+    watch: {
+        lat() {
+            if (this.map != null) {
+                return;
+            }
+            document.getElementById("mapContainer").removeAttribute("hidden");
+            this.map = L.map('mapContainer').setView([this.lat, this.lng], 13);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(this.map);
+            
+            this.markersGroup = L.layerGroup();
+            this.map.addLayer(this.markersGroup);
+
+            this.map.on('click', (e) => {
+                this.addMarker(e, this.markersGroup, this.map);
+            });
         }
     },
 
     methods: {
-        getCoordinates() {
+        async getCoordinates() {
             navigator.geolocation.getCurrentPosition(pos => {
                 this.lat = pos.coords.latitude;
                 this.lng = pos.coords.longitude;
             });
         },
 
-        async createEvent() {
-            const lastEvent = await getDocs(
-                query(collection(db, "events"),
-                orderBy("id", "desc"),
-                limit(1)
-            ));
-            let nextId = 0;
-            lastEvent.forEach(event_ => {
-                nextId = parseInt(event_.data().id) + 1;
-            });
+        addMarker(e, markersGroup) {
+            markersGroup.clearLayers();
+            this.newMarker = new L.marker(e.latlng).addTo(markersGroup);
+            this.lat = e.latlng.lat;
+            this.lng = e.latlng.lng;
+        },
+
+        async compressImage() {
+            var canvas = document.getElementById("photo-canvas");
+            var dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            document.getElementById("photo-img").src = dataUrl;
+            this.uploadFromCamera = true;
+        },
+
+        removeImage() {
+            document.getElementById("photo-img").setAttribute("src", "");
+            this.uploadFromCamera = false;
+        },
+
+        async createFirestoreEvent(nextId) {
             await setDoc(
                 doc(collection(db, "events"), "event-" + nextId),
                 {
@@ -57,18 +95,99 @@ export default {
                     max_users: parseInt(this.maxUsers),
                     preview_image: this.imageLink,
                     description: this.description,
-                }
-            );
-            this.router.push("/");
+                });
+        },
+
+        async createEvent() {
+            const img = document.getElementById("photo-img").src;
+            const lastEvent = await getDocs(
+                query(collection(db, "events"),
+                orderBy("id", "desc"),
+                limit(1)
+            ));
+            let nextId = 0;
+            lastEvent.forEach(event_ => {
+                nextId = parseInt(event_.data().id) + 1;
+            });
+            if (this.uploadFromCamera) {
+                const sRef = ref(this.storage, nextId+".jpg");
+                uploadString(sRef, img, "data_url").then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        this.imageLink = downloadURL;
+                    }).then(async () => {
+                        await this.createFirestoreEvent(nextId);
+                        this.router.push("/");
+                    });
+                });
+            } else {
+                await this.createFirestoreEvent(nextId);
+                this.router.push("/");
+            }
+        },
+
+        recordVideo() {
+            navigator.mediaDevices
+                .getUserMedia({ video: true, audio: false })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch((err) => {
+                    console.error(`An error occurred: ${err}`);
+                });
         }
+
+    },
+
+    mounted() {
+        var img = this.image;
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("photo-canvas");
+        video.addEventListener(
+        "canplay",
+            (ev) => {
+                if (!this.recording) {
+                this.height = (video.videoHeight / video.videoWidth) * this.width;
+
+                video.setAttribute("width", this.width);
+                video.setAttribute("height", this.height);
+                canvas.setAttribute("width", this.width);
+                canvas.setAttribute("height", this.height);
+                document.getElementById("photo-img").setAttribute("hidden", "");
+                document.getElementById("video").removeAttribute("hidden");
+                this.recording = true;
+                } else {
+                    this.recording = false;
+                    document.getElementById("video").setAttribute("hidden", "");
+                    document.getElementById("photo-img").removeAttribute("hidden");
+                    const context = canvas.getContext("2d");
+                    canvas.width = this.width;
+                    canvas.height = this.height;
+                    context.drawImage(video, 0, 0, this.width, this.height);
+                    this.compressImage();
+                }
+            }
+        );
     }
 }
 </script>
 
 <template>
     <div class="main">
-        <button v-on:click="getCoordinates">Get coordinates from your current position</button>
+        <div class="buttons">
+            <button v-on:click="recordVideo">Make a picture</button>
+            <button v-on:click="removeImage">Remove image</button>
+            <video id="video" hidden></video>
+            <canvas id="photo-canvas" hidden></canvas>
+            <img id="photo-img" src="" hidden alt="">
+            <button v-on:click="getCoordinates">Get coordinates</button>
+        </div>
+        
         <form action="/" @submit.prevent="createEvent">
+            <div id="mapContainer" class="mapContainer" hidden>
+
+            </div>
             <input class="col-sm input-area" required v-model="name" placeholder="Event name">
             <select class="col-sm select-area" required v-model="category">
                 <option selected>Top</option>
@@ -79,7 +198,7 @@ export default {
             <input type="number" class="col-sm input-area" required v-model="lat" placeholder="Coordinates (lat)">
             <input type="number" class="col-sm input-area" required v-model="lng" placeholder="Coordinates (lng)">
             <input type="text" class="col-sm input-area" required v-model="address" placeholder="Address">
-            <input type="numner" class="col-sm input-area" required v-model="maxUsers" placeholder="Max users">
+            <input type="number" class="col-sm input-area" required v-model="maxUsers" placeholder="Max users">
             <input type="number" class="col-sm input-area" required v-model="price" placeholder="Price">
             <textarea placeholder="Description" class="col-sm input-area" required v-model="description"></textarea>
             <button v-on:click="createEvent">Create event</button>
@@ -97,6 +216,17 @@ export default {
     form > *, .main > * {
         margin: 1vh 0 1vh 0;
     }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .buttons > * {
+        margin: 1vh 0 1vh 0;
+    }
     .input-area {
       width: 100%;
       height: auto;
@@ -112,6 +242,12 @@ export default {
 
     button {
         width: 100%;
+        max-width: 50vh;
+    }
+
+    #mapContainer {
+        width: 100%;
+        height: 300px;
         max-width: 50vh;
     }
 
