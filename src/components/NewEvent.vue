@@ -128,7 +128,7 @@ export default {
 
         recordVideo() {
             navigator.mediaDevices
-                .getUserMedia({ video: true, audio: false })
+                .getUserMedia({ video: true, audio: false, facingMode: {exact: 'environment'}})
                 .then((stream) => {
                     video.srcObject = stream;
                     video.play();
@@ -215,6 +215,11 @@ export default {
     }
     form > *, .main > * {
         margin: 1vh 0 1vh 0;
+    }
+
+    #video, #photo-img {
+        max-height: 50vh;
+        max-width: 90vw;
     }
 
     .buttons {

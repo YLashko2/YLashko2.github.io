@@ -72,6 +72,7 @@ import Header from "./Header.vue";
                     user_email: this.store.getters.user.data.email,
                     event_id: this.event_.id,
                 });
+                navigator.vibrate(300);
                 this.router.push("/");
             },
 
