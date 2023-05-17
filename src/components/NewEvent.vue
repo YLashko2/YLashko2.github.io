@@ -128,7 +128,19 @@ export default {
 
         recordVideo() {
             navigator.mediaDevices
-                .getUserMedia({ video: {facingMode: {exact: 'environment'}}, audio: false })
+                .getUserMedia({ video: {
+                    facingMode: {exact: 'environment'},
+                    height: {
+                        min: 1280,
+                        ideal: 1920,
+                        max: 2560,
+                    },
+                    width: {
+                        min: 720,
+                        ideal: 1080,
+                        max: 1440,
+                    },
+                }, audio: false })
                 .then((stream) => {
                     video.srcObject = stream;
                     video.play();
